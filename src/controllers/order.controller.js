@@ -1,18 +1,25 @@
-const { orderService , cartService , emailService} = require("../services");
+const { orderService , cartService , emailService , userService} = require("../services");
 
 /** create order */
 const createOrder = async (req, res) => {
   try {
     const reqBody = req.body;
-    const order = await orderService.createOrder(reqBody);
-    if (!order){
+    //check if user exist or not
+    const user = await userService.createUser(reqBody);
+    if (!user){
+      throw new Error("please add user!");
+    }
+    //check if order exist or not
+    const orderExists = await orderService.getOrderById(reqBody);
+    if (!orderExists){
       throw new Error("please add a order!");
     }
+    //check if cart exist or not
     const cartExists =await cartService.getcartById(reqBody);
     if (!cartExists){
       throw new Error("please add to cart!")
     }
-    const mailSend = await emailService.sendMail(reqBody.email,reqBody.subject,reqBody.text);
+    const mailSend = await emailService.sendMail(user.email, data , "order done");
     if (!mailSend){
       throw new Error("Something went wrong, please try again or later.");
     }
@@ -45,6 +52,7 @@ const getOrderList = async (req, res) => {
 const deleteOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;
+    //check if order exist or not
     const orderExists = await orderService.getOrderById(orderId);
     if (!orderExists) {
       throw new Error("order not found!");
@@ -65,6 +73,7 @@ const updateOrder = async (req, res) => {
   try {
     const reqBody = req.body;
     const orderId = req.params.buorderId;
+    //check if order exist or not
     const orderExists = await orderService.getOrderById(orderId);
     if (!orderExists) {
       throw new Error("order not found!");

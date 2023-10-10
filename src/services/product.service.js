@@ -8,7 +8,6 @@ const createProduct = async (reqBody) => {
 // Get Product list
 const getProductList = async () => {
   return Product.find().populate("category");
-  // return Product.find({$or:[{is_active:false}]});
 };
 
 // Get Product details by id

@@ -5,24 +5,26 @@ const validate = require("../../middlewares/validate");
 
 const router = express.Router();
 
-/** create order */
+// create order
 router.post(
   "/create-order",
   validate(orderValidation.createOrder),
   orderController.createOrder
 );
 
-/** order list */
+// order list
 router.get(
   "/list",
   orderController.getOrderList
 )
 
+// delete order
 router.delete(
   "/delete/:orderId",
   orderController.deleteOrder
 )
 
+//update order
 router.put(
   "/update-order/:orderId",
   orderController.updateOrder

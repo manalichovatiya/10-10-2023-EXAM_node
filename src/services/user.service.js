@@ -8,7 +8,6 @@ const createUser = async (reqBody) => {
 // Get user list
 const getUserList = async () => {
   return User.find();
-  // return User.find({$or:[{is_active:false}]});
 };
 
 // Get user by email
