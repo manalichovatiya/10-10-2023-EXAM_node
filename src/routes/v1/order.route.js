@@ -8,7 +8,7 @@ const router = express.Router();
 // create order
 router.post(
   "/create-order",
-  validate(orderValidation.createOrder),
+  validate(orderValidation.create_Order),
   orderController.createOrder
 );
 

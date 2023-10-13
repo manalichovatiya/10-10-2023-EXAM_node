@@ -18,9 +18,13 @@ const orderSchema = new mongoose.Schema(
             trim : true,
         },
         // ref user id
-        User_id : {
+        Users : {
             type : mongoose.Types.ObjectId,
             ref : "Users"
+        },
+        Cart:{
+            type:mongoose.Types.ObjectId,
+            ref:"Cart"
         },
         is_active : {
             type : Boolean,

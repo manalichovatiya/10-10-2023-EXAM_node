@@ -1,35 +1,29 @@
-const { orderService , cartService , emailService , userService} = require("../services");
+// const Users = require("../models/user");
+const { orderService, cartService, emailService, userService } = require("../services");
 
 /** create order */
 const createOrder = async (req, res) => {
   try {
     const reqBody = req.body;
     //check if user exist or not
-    const user = await userService.createUser(reqBody);
-    if (!user){
-      throw new Error("please add user!");
-    }
-    //check if order exist or not
-    const orderExists = await orderService.getOrderById(reqBody);
-    if (!orderExists){
-      throw new Error("please add a order!");
-    }
+    const userExists = await userService.getUserById(reqBody.Users);
+    if (!userExists) { throw new Error("please add user!") }
+
     //check if cart exist or not
-    const cartExists =await cartService.getcartById(reqBody);
-    if (!cartExists){
-      throw new Error("please add to cart!")
-    }
-    const mailSend = await emailService.sendMail(user.email, data , "order done");
-    if (!mailSend){
-      throw new Error("Something went wrong, please try again or later.");
-    }
+    const cartExists = await cartService.getcartById(reqBody.Cart);
+    if (!cartExists) { throw new Error("please add to cart!") }
+
+    // create order
+    const order = await orderService.createOrder(reqBody);
+    if (!order) { throw new Error("anter the order!") }
+    await emailService.sendMail(userExists.email,"Order confirmation","Your order is confirme");
     res.status(200).json({
       success: true,
       message: "order create successfully!",
-      data: { reqBody },
+      data: { order },
     });
   } catch (error) {
-    res.status(400).json({ success: false, message:  error.message});
+    res.status(400).json({ success: false, message: error.message });
   }
 };
 
@@ -48,7 +42,7 @@ const getOrderList = async (req, res) => {
   }
 };
 
-/** Delete order */
+// /** Delete order */
 const deleteOrder = async (req, res) => {
   try {
     const orderId = req.params.orderId;
